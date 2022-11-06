@@ -4,12 +4,12 @@ import { Field, FieldCheckboxes } from "components/field";
 import ImageUpload from "components/image/ImageUpload";
 import { Input } from "components/input";
 import { Label } from "components/label";
-import { Textarea } from "components/textarea";
 import { db } from "firebase-app/firebase-config";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import useFirebaseImage from "hooks/useFirebaseImage";
 import DashboardHeading from "module/dashboard/DashboardHeading";
-import React, { useEffect } from "react";
+import React from "react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -50,7 +50,6 @@ const UserUpdate = () => {
       toast.error("Update user failed!");
     }
   };
-
   async function deleteAvatar() {
     const colRef = doc(db, "users", userId);
     await updateDoc(colRef, {
@@ -60,6 +59,7 @@ const UserUpdate = () => {
   useEffect(() => {
     setImage(imageUrl);
   }, [imageUrl, setImage]);
+
   useEffect(() => {
     async function fetchData() {
       if (!userId) return;
@@ -69,13 +69,12 @@ const UserUpdate = () => {
     }
     fetchData();
   }, [userId, reset]);
-
   if (!userId) return null;
   return (
     <div>
       <DashboardHeading
         title="Update user"
-        desc="Update user information"
+        desc=" Update user to system"
       ></DashboardHeading>
       <form onSubmit={handleSubmit(handleUpdateUser)}>
         <div className="w-[200px] h-[200px] mx-auto rounded-full mb-10">
@@ -95,6 +94,9 @@ const UserUpdate = () => {
               placeholder="Enter your fullname"
               control={control}
             ></Input>
+            {/* {errors.fullname && (
+              <p className="text-sm text-red-500">{errors.fullname.message}</p>
+            )} */}
           </Field>
           <Field>
             <Label>Username</Label>
@@ -103,6 +105,9 @@ const UserUpdate = () => {
               placeholder="Enter your username"
               control={control}
             ></Input>
+            {/* {errors.username && (
+              <p className="text-sm text-red-500">{errors.username.message}</p>
+            )} */}
           </Field>
         </div>
         <div className="form-layout">
@@ -114,6 +119,9 @@ const UserUpdate = () => {
               control={control}
               type="email"
             ></Input>
+            {/* {errors.email && (
+              <p className="text-sm text-red-500">{errors.email.message}</p>
+            )} */}
           </Field>
           <Field>
             <Label>Password</Label>
@@ -123,6 +131,9 @@ const UserUpdate = () => {
               control={control}
               type="password"
             ></Input>
+            {/* {errors.password && (
+              <p className="text-sm text-red-500">{errors.password.message}</p>
+            )} */}
           </Field>
         </div>
         <div className="form-layout">
@@ -185,12 +196,6 @@ const UserUpdate = () => {
             </FieldCheckboxes>
           </Field>
         </div>
-        <div className="form-layout">
-          <Field>
-            <Label>Description</Label>
-            <Textarea name="description" control={control}></Textarea>
-          </Field>
-        </div>
         <Button
           kind="primary"
           type="submit"
@@ -198,7 +203,7 @@ const UserUpdate = () => {
           isLoading={isSubmitting}
           disabled={isSubmitting}
         >
-          Update
+          Update user
         </Button>
       </form>
     </div>

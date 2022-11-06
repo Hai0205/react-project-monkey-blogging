@@ -78,6 +78,7 @@ const UserTable = () => {
           <div className="flex items-center gap-x-3">
             <img
               src={user?.avatar}
+              P
               alt=""
               className="flex-shrink-0 object-cover w-10 h-10 rounded-full"
             />
