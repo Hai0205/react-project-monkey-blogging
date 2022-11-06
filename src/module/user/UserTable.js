@@ -70,6 +70,7 @@ const UserTable = () => {
     });
   };
   const renderUserItem = (user) => {
+    console.log("renderUserItem ~ user", user);
     return (
       <tr key={user.id}>
         <td title={user.id}>{user.id.slice(0, 5) + "..."}</td>
@@ -78,7 +79,7 @@ const UserTable = () => {
             <img
               src={user?.avatar}
               alt=""
-              className="flex-shrink-0 object-cover w-10 h-10 rounded-md"
+              className="flex-shrink-0 object-cover w-10 h-10 rounded-full"
             />
             <div className="flex-1">
               <h3>{user?.fullname}</h3>
@@ -91,11 +92,11 @@ const UserTable = () => {
           </div>
         </td>
         <td>{user?.username}</td>
-        <td>{user?.email.slice(0, 5) + "..."}</td>
+        <td>{user?.email}</td>
         <td>{renderLabelStatus(Number(user?.status))}</td>
         <td>{renderRoleLabel(Number(user.role))}</td>
         <td>
-          <div className="flex items-center gap-x-3 text-gray-500">
+          <div className="flex items-center text-gray-500 gap-x-3">
             <ActionEdit
               onClick={() => navigate(`/manage/update-user?id=${user.id}`)}
             ></ActionEdit>

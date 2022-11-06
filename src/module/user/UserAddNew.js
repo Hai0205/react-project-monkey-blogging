@@ -14,6 +14,29 @@ import { auth, db } from "firebase-app/firebase-config";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import slugify from "slugify";
 import { toast } from "react-toastify";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useEffect } from "react";
+
+const schema = yup.object({
+  fullname: yup.string().required("Please enter your fullname"),
+  username: yup.string().required("Please enter your username"),
+  email: yup
+    .string()
+    .email("Please enter valid email address")
+    .required("Please enter your email address"),
+  password: yup
+    .string()
+    .min(8, "Your password must be at least 8 characters or greater")
+    .matches(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+      {
+        message:
+          "Your password must have at least 1 uppercase, 1 lowercase, 1 special character",
+      }
+    )
+    .required("Please enter your password"),
+});
 
 const UserAddNew = () => {
   const {
@@ -22,10 +45,11 @@ const UserAddNew = () => {
     setValue,
     watch,
     getValues,
-    formState: { isValid, isSubmitting },
+    formState: { isValid, isSubmitting, errors },
     reset,
   } = useForm({
     mode: "onChange",
+    resolver: yupResolver(schema),
     defaultValues: {
       fullname: "",
       email: "",
@@ -83,6 +107,15 @@ const UserAddNew = () => {
   };
   const watchStatus = watch("status");
   const watchRole = watch("role");
+  // useEffect(() => {
+  //   const arrErroes = Object.values(errors);
+  //   if (arrErroes.length > 0) {
+  //     toast.error(arrErroes[0]?.message, {
+  //       pauseOnHover: false,
+  //       delay: 0,
+  //     });
+  //   }
+  // }, [errors]);
   return (
     <div>
       <DashboardHeading
@@ -107,6 +140,9 @@ const UserAddNew = () => {
               placeholder="Enter your fullname"
               control={control}
             ></Input>
+            {errors.fullname && (
+              <p className="text-sm text-red-500">{errors.fullname.message}</p>
+            )}
           </Field>
           <Field>
             <Label>Username</Label>
@@ -115,6 +151,9 @@ const UserAddNew = () => {
               placeholder="Enter your username"
               control={control}
             ></Input>
+            {errors.username && (
+              <p className="text-sm text-red-500">{errors.username.message}</p>
+            )}
           </Field>
         </div>
         <div className="form-layout">
@@ -126,6 +165,9 @@ const UserAddNew = () => {
               control={control}
               type="email"
             ></Input>
+            {errors.email && (
+              <p className="text-sm text-red-500">{errors.email.message}</p>
+            )}
           </Field>
           <Field>
             <Label>Password</Label>
@@ -135,6 +177,9 @@ const UserAddNew = () => {
               control={control}
               type="password"
             ></Input>
+            {errors.password && (
+              <p className="text-sm text-red-500">{errors.password.message}</p>
+            )}
           </Field>
         </div>
         <div className="form-layout">
