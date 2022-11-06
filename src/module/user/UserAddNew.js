@@ -16,7 +16,6 @@ import slugify from "slugify";
 import { toast } from "react-toastify";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useEffect } from "react";
 
 const schema = yup.object({
   fullname: yup.string().required("Please enter your fullname"),
